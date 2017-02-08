@@ -1,0 +1,12 @@
+A1,Loading,None
+A2,Loading,None
+B1,Loading,None
+B2,Loading,None
+C1,Loading,None
+C2,Loading,None
+CR1_LOADING,False,True
+CR1_X,A,B
+CR1_Y,_1,_2
+CR2_LOADING,False,True
+CR2_X,B,C
+CR2_Y,_1,_2

@@ -1,0 +1,25 @@
+A_STA=H && B_STA=H -> A_STA=R && B_STA=R
+A_STA=H -> A_STA=R
+B_STA=H -> B_STA=R
+A_STA=R && B_STA=R -> A_STA=M
+A_STA=R && B_STA=R -> B_STA=M
+A_STA=M && B_STA=R -> B_STA=S
+B_STA=M && A_STA=R -> A_STA=S
+A_STA=R || A_STA=O || A_STA=S || A_STA=M -> A_STA=H
+B_STA=R || B_STA=O || B_STA=S || B_STA=M -> B_STA=H
+A_STA=S && B_STA=H -> A_STA=M
+B_STA=S && A_STA=H -> A_STA=M
+A_STA=M && B_STA=S -> A_STA=S && B_STA=M
+A_STA=S && B_STA=M -> A_STA=M && B_STA=S
+A_STA=R && ( B_STA=R || B_STA=O || B_STA=S ) -> A_STA=M
+B_STA=R && ( A_STA=R || A_STA=O || A_STA=S ) -> B_STA=M
+A_STA=R && B_STA=M -> A_STA=S
+B_STA=R && A_STA=M -> B_STA=S
+A_STA=R -> A_STA=O
+B_STA=R -> B_STA=O
+A_STA=O -> A_STA=R
+A_STA=S && B_STA=M -> A_STA=R
+B_STA=O -> B_STA=R
+B_STA=S && A_STA=M -> B_STA=R
+(A_STA=S || A_STA=R || A_STA=O) && (B_STA=H || B_STA=R || B_STA=O || B_STA=M) -> A_STA=H
+(B_STA=S || B_STA=R || B_STA=O) && (A_STA=H || A_STA=R || A_STA=O || A_STA=M) -> B_STA=H

@@ -1,0 +1,25 @@
+A1=None ->  A1=Loading
+CR1_LOADING=True && A1=None && CR1_X=A && CR1_Y=_1 -> CR1_LOADING=False && A1=Loading
+CR1_LOADING=False && A1=Loading && CR1_X=A && CR1_Y=_1 -> CR1_LOADING=True && A1=None
+CR1_LOADING=True && B1=None && CR1_X=B && CR1_Y=_1 -> CR1_LOADING=False && B1=Loading
+CR1_LOADING=False && B1=Loading && CR1_X=B && CR1_Y=_1 -> CR1_LOADING=True && B1=None
+CR1_Y=_1 -> CR1_Y=_2
+CR1_LOADING=True && A2=None && CR1_X=A && CR1_Y=_2 -> CR1_LOADING=False && A2=Loading
+CR1_LOADING=False && A2=Loading && CR1_X=A && CR1_Y=_2 -> CR1_LOADING=True && A2=None
+CR1_LOADING=True && B2=None && CR1_X=B && CR1_Y=_2 -> CR1_LOADING=False && B2=Loading
+CR1_LOADING=False && B2=Loading && CR1_X=B && CR1_Y=_2 -> CR1_LOADING=True && B2=None
+CR1_Y=_2 -> CR1_Y=_1
+CR1_X=A && CR2_X=C -> CR1_X=B
+CR1_X=B -> CR1_X=A
+CR2_LOADING=True && B1=None && CR2_X=B && CR2_Y=_1 -> CR2_LOADING=False && B1=Loading
+CR2_LOADING=False && B1=Loading && CR2_X=B && CR2_Y=_1 -> CR2_LOADING=True && B1=None
+CR2_LOADING=True && C1=None && CR2_X=C && CR2_Y=_1 -> CR2_LOADING=False && C1=Loading
+CR2_LOADING=False && C1=Loading && CR2_X=C && CR2_Y=_1 -> CR2_LOADING=True && C1=None
+CR2_Y=_1 -> CR2_Y=_2
+CR2_LOADING=True && B2=None && CR2_X=B && CR2_Y=_2 -> CR2_LOADING=False && B2=Loading
+CR2_LOADING=False && B2=Loading && CR2_X=B && CR2_Y=_2 -> CR2_LOADING=True && B2=None
+CR2_LOADING=True && C2=None && CR2_X=C && CR2_Y=_2 -> CR2_LOADING=False && C2=Loading
+CR2_LOADING=False && C2=Loading && CR2_X=C && CR2_Y=_2 -> CR2_LOADING=True && C2=None
+CR2_Y=_2 -> CR2_Y=_1
+CR2_X=B -> CR2_X=C
+CR2_X=C && CR1_X=A -> CR2_X=B

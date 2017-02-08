@@ -1,0 +1,9 @@
+0:A搬入:A1=None ->  A1=Loading
+1:棚A搬出:CR1_LOADING=False && A1=Loading && CR1_X=A -> CR1_LOADING=True  && A1=None
+2:棚B搬入:CR1_LOADING=True  && B1=None    && CR1_X=B -> CR1_LOADING=False && B1=Loading
+3:棚B搬出:CR2_LOADING=False && B1=Loading && CR2_X=B -> CR2_LOADING=True  && B1=None
+4:棚C搬入:CR2_LOADING=True  && C1=None    && CR2_X=C -> CR2_LOADING=False && C1=Loading
+5:クレーン1右:CR1_X=A && CR2_X=C -> CR1_X=B
+6:クレーン1左:CR1_X=B -> CR1_X=A
+7:クレーン2左:CR2_X=C && CR1_X=A -> CR2_X=B
+8:クレーン2右:CR2_X=B -> CR2_X=C

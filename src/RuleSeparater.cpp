@@ -161,7 +161,7 @@ int main(int argc, char const *argv[]){
     std::vector<double> sortee(m_solved_val.data(), m_solved_val.data() + m_solved_val.rows() * m_solved_val.cols());
 
     // 一番大きい要素を削除
-    sortee.erase(std::remove(sortee.begin(), sortee.end(), *std::min_element(sortee.begin(),sortee.end())), sortee.end()); 
+    sortee.erase(std::remove(sortee.begin(), sortee.end(), *std::min_element(sortee.begin(),sortee.end())), sortee.end());
 
     Eigen::VectorXd resultEigen=es.eigenvectors().col(std::distance(
       m_solved_val.data(),
@@ -179,10 +179,6 @@ int main(int argc, char const *argv[]){
     ruleList.clear();
     ruleList.seekg(0,std::ios::beg);
 
-    // 
-    // generate DecodeTable
-    // 
-
     // decodeTable_*
     // カンマ区切りの、
     // 1行目:m番目のルール番号n
@@ -194,9 +190,9 @@ int main(int argc, char const *argv[]){
     std::string decodeStrA,decodeStrB;
     std::string readingLineBuffer;
 
-    // 
-    // Generate separated rules & write first line of decodeTable (Mapping Rules)
-    // 
+    //
+    // 部分モデルの作成(制御ルール定義と、符号化テーブルの1行目)
+    //
 
     std::fstream separateResult_A(resultDirFullPath+"ruleCuts_A",std::ios::in | std::ios::out | std::ios::trunc);
     std::fstream separateResult_B(resultDirFullPath+"ruleCuts_B",std::ios::in | std::ios::out | std::ios::trunc);
@@ -214,9 +210,9 @@ int main(int argc, char const *argv[]){
     decodeTable_A<<decodeStrA;
     decodeTable_B<<decodeStrB;
 
-    // 
-    // Write second line of decodeTable (Mapping Attrs)
-    // 
+    //
+    // 部分モデルの作成(属性定義と、符号化テーブルの2行目)
+    //
     std::set<std::string> preProperties_A={};
     std::set<std::string> postProperties_A={};
     std::set<std::string> preProperties_B={};
@@ -245,7 +241,6 @@ int main(int argc, char const *argv[]){
     decodeStrA.clear();
     decodeStrB.clear();
 
-    // よみこみ、
     for(int i=0;std::getline(attrTable,readingLineBuffer);i++){
       std::string attr=readingLineBuffer.substr(0,readingLineBuffer.find_first_of(","));
       // 読み込んだ属性がA側に出てくるなら、A側にコピー
@@ -263,6 +258,9 @@ int main(int argc, char const *argv[]){
     decodeTable_A<<'\n'<<decodeStrA;
     decodeTable_B<<'\n'<<decodeStrB;
 
+    //
+    // 共通属性定義の作成
+    //
     std::vector<std::string> commonProperties;
     std::vector<std::string> commonPropertiesAtoB;
     std::vector<std::string> commonPropertiesBtoA;

@@ -38,8 +38,6 @@ std::vector<int> getValue(neo4j_session_t* session,const char* cql){
 int main(int argc, char *argv[]){
     using namespace std;
     system("date");
-    // std::ifstream readStream("./InitialStates_crane2f_B");
-    // unordered_set<int> checker;
 
     neo4j_client_init();
     /* use NEO4J_INSECURE when connecting to disable TLS */
@@ -136,39 +134,6 @@ int main(int argc, char *argv[]){
         }
         //   *) 戻れる(t[戻り先ID]==-1,未踏)先のノードを、スタックに積む
           destinations.pop();
-
-{
-    //     cout<<"---------------"<<'\n';
-    //       cout<<"ループ終了(巻き戻り)"<<'\n';
-    //       cout<<"top():"<<chosenID<<'\n';
-    //       cout<<"traversed:"<<'\n';
-    //       for(auto i:traversedNode){
-    //         if(i.second>0){
-    //           cout<<i.first<<" : "<<"evaluated("<<i.second<<")"<<'\n';
-    //         }
-    //         if(i.second==0){
-    //           cout<<i.first<<" : "<<"traversed"<<'\n';
-    //         }
-    //         if(i.second==-1){
-    //           cout<<i.first<<" : "<<"-"<<'\n';
-    //         }
-    //       }
-    //       cout<<"goingList: ";
-    //       for(auto i:goingList){
-    //         if(traversedNode[i]!=-1){
-    //           cout<<"("<<i<<")"<<" ";
-    //         }else{
-    //           cout<<i<<" ";
-    //         }
-    //       }
-    //       cout<<'\n';
-    //       cout<<"destinations: ";
-    //       for (auto dump = destinations; !dump.empty(); dump.pop())
-    //           std::cout << dump.top() << ' ';
-    //       cout<<'\n';
-    //       cout<<"---------------"<<'\n';
-}
-
             continue;
           }else{
         // c) 進める遷移があれば、その遷移先のノードをスタックに積み、t[いまのID]=0(到達済みだが未評価)
@@ -176,69 +141,11 @@ int main(int argc, char *argv[]){
               if(traversedNode[i]==-1)destinations.push(i);
             }
             traversedNode[chosenID]=0;
-/*
-{
-          cout<<"---------------"<<'\n';
-          cout<<"ループ終了(進行)"<<'\n';
-          cout<<"top():"<<chosenID<<'\n';
-          cout<<"traversed:"<<'\n';
-          for(auto i:traversedNode){
-            if(i.second>0){
-              cout<<i.first<<" : "<<"evaluated("<<i.second<<")"<<'\n';
-            }
-            if(i.second==0){
-              cout<<i.first<<" : "<<"traversed"<<'\n';
-            }
-            if(i.second==-1){
-              cout<<i.first<<" : "<<"-"<<'\n';
-            }
-          }
-          cout<<"goingList: ";
-          for(auto i:goingList){
-            if(traversedNode[i]!=-1){
-              cout<<"("<<i<<")"<<" ";
-            }else{
-              cout<<i<<" ";
-            }
-          }
-          cout<<'\n';
-          cout<<"destinations: ";
-          for (auto dump=destinations;!dump.empty();dump.pop())
-              std::cout << dump.top() << ' ';
-          cout<<'\n';
-          cout<<"---------------"<<'\n';
-}
-  */
         }
     }
 
-{
-        // cout<<"----------"<<'\n';
-        // cout<<"DFS Part.1"<<'\n';
-        // cout<<"----------"<<'\n';
-        // for(auto i:traversedNodeOrder){
-        //   cout<<i.first<<" : "<<i.second<<'\n';
-        // }
 
-        // for(auto i:traversedNode){
-        //   if(i.second>0){
-        //     cout<<i.first<<" : "<<"evaluated("<<i.second<<")"<<'\n';
-        //   }
-        //   if(i.second==0){
-        //     cout<<i.first<<" : "<<"traversed"<<'\n';
-        //   }
-        //   if(i.second==-1){
-        //     cout<<i.first<<" : "<<"-"<<'\n';
-        //   }
-        // }
-}
-        ////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////
         // 4) 2回目の深さ優先探索の開始(終了条件:サイズ比較)
-        ////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////
 
         int traversedNodeSize=traversedNode.size();
         int traversedNodeIndex=static_cast<int>(traversedNodeSize);
@@ -255,7 +162,7 @@ int main(int argc, char *argv[]){
         // "サブグラフ全体の"探索履歴
         unordered_set<int> traversedHistory;
 
-      //   a) そのIDに対応するノードと、遷移先のノードの情報を取得
+        // a) そのIDに対応するノードと、遷移先のノードの情報を取得
         // 2回目の探索は遷移を逆向きに捉えてDFS
         // while(counter2++<20){
         while(traversedNodeOrder.size()>0){ 
@@ -270,7 +177,6 @@ int main(int argc, char *argv[]){
           traversedTmp.emplace(chosenID);
           traversedHistory.emplace(chosenID);
           auto goingList = getValue(session,string("match (x)-->(d) where d.localID="+to_string(chosenID)+" AND d:"+tableID+" AND x:"+tableID+" return distinct x.localID").c_str());
-          // auto goingList = getValue(session,string("match (d) where ID(d) = "+to_string(chosenID)+" AND n:"+tableID+" OPTIONAL MATCH (x)-->(d) return distinct ID(x)").c_str());
           // b) 進める遷移がなければ(遷移がない or t[進行先id]が全て>0(=評価済み))
           if(goingList.empty()
             || all_of(goingList.begin(),goingList.end(),[&](int destID){
@@ -281,7 +187,6 @@ int main(int argc, char *argv[]){
         //   *) 戻れる(t[戻り先ID]==-1,未踏)先のノードを、スタックに積む
             for(auto i:goingList){
               if(traversedHistory.count(i)>0 && traversedTmp.count(i)==0 && traversedTmp.size()>1){
-                // cout<<"(scc)<-"<<chosenID<<"<-"<<i<<"("<<traversedTmp.size()<<")"<<endl;
                 // TODO:"脱出状態"と、"そこに至る遷移"を取得(SCC内部の脱出状態は必要ない)
                 // パス導出の際には、脱出状態から、その遷移を使った先の状態を取得→SCCに入った状態と、その状態のパス探索?
                 // Neo4j上の状態に、プロパティ(SCCのID)をセットするようなCQLを出力
@@ -298,23 +203,7 @@ int main(int argc, char *argv[]){
             // 1回のDFSの探索要素(一筆書き) = 強連結成分
             // = destinationsがなくなるまでやる
             // 上のdestinationsの再スタート(stack<int>())は、1回のDFSが終わったあとの処理
-/*{
-          cout<<"--pop:--"<<'\n';
-          cout<<"--traversedTmp--"<<'\n';
-          for(auto i:traversedTmp){
-            cout<<i<<" ";
-          }
-          cout<<'\n';
-          cout<<"--traversedHistory--"<<'\n';
-          for(auto i:traversedHistory){
-            cout<<i<<" ";
-          }
-          cout<<'\n';
-          cout<<"destinations: ";
-          for (auto dump=destinations;!dump.empty();dump.pop())
-              std::cout << dump.top() << ' ';
-          cout<<'\n';
-}*/
+
           }else{
             // 進行可能な条件
             // (1) 行き先のノードが探訪済み(=1)で無いこと
@@ -327,29 +216,15 @@ int main(int argc, char *argv[]){
                 break;
               }
             }
-/*{
-          cout<<"--traversal:--"<<'\n';
-          for(auto i:traversedTmp){
-            cout<<i<<" ";
-          }
-          cout<<'\n';
-          cout<<"destinations: ";
-          for (auto dump=destinations;!dump.empty();dump.pop())
-              std::cout << dump.top() << ' ';
-          cout<<'\n';
-}*/
           } //else 
         } //destination.empty()
 
       unordered_set<int> scc;
-      // cout<<"traversed route:"<<'\n';
       for(auto i:traversedTmp){
         scc.emplace(i);
         traversedNodeOrder.erase(traversedNode.at(i));
         traversedHistory.emplace(i);
-        // cout<<i<<" ";
       }
-      // cout<<"\n残り"<<traversedNodeOrder.size()<<endl;
       // 強連結成分が2つ以上なら、それらは縮約対象
       if(scc.size()>=2){
         for(auto& i:scc){
@@ -368,16 +243,9 @@ int main(int argc, char *argv[]){
       }
       if(traversedNodeOrder.size()>0){
         destinations=stack<int>();
-        // cout<<"nextIndex:"<<traversedNodeOrder.rbegin()->second<<endl;
         destinations.emplace(traversedNodeOrder.rbegin()->second);
       }
-    } // traversedNodeOrder.size()>0
-
-
-
-      // cout<<"----------"<<'\n';
-      // cout<<"DFS Part.2"<<'\n';
-      // cout<<"----------"<<'\n';
+    } 
 
       cout<<"このサブグラフの縮約対象:";;
       if(sccList.size()==0){
@@ -391,11 +259,6 @@ int main(int argc, char *argv[]){
           for(auto j:get<1>(i)){
             contractedNodeNum++;
             cout<<j<<" ";
-            // if(checker.count(j)==1){
-            //   cout<<endl<<"ダブリ" <<endl;
-            //   throw "x";
-            // }
-            // checker.emplace(j);
           }
           cout<<"}"<<"\n";
         }
@@ -409,10 +272,7 @@ int main(int argc, char *argv[]){
             cerr<<"AND SCCNode:SCCNode AND SCCNode.SCCID="<<get<0>(i)<<" ";
             cerr<<" create (sccSource)<-[:SCCEdge]-(SCCNode);"<<endl;
           }
-
         }
-
-
       }
 
       if(sccList.size()==0){
@@ -434,59 +294,37 @@ int main(int argc, char *argv[]){
       }
 
       // 強連結成分分解済みのサブグラフ内ノードを探索済みにする
-        for(const auto& i : traversedNode){
-          unsearchedID.erase(i.first);
-        }
+      for(const auto& i : traversedNode){
+        unsearchedID.erase(i.first);
       }
-      auto tmp=nodeCount-contractedNodeNum+nodeNumAfterContraction;
-      stringstream resultStr;
-      resultStr<<"--------------------------------------------------------"<<endl;
-      resultStr<<"  Result: "<<tableID<<endl;
-      resultStr<<"--------------------------------------------------------"<<endl;
-      resultStr<<" 縮約前の全状態の個数     \t: "    <<nodeCount<<endl;
-      resultStr<<" 縮約された状態数         \t: "  <<contractedNodeNum<<endl;
-      resultStr<<" 作成された縮約状態の個数  \t: "  <<nodeNumAfterContraction<<endl;
-      resultStr<<" 縮約処理後の状態数        \t: "  <<tmp<<endl;
-      resultStr<<" 縮約後遷移集合のサイズ比率\t: "  <<(static_cast<double>(tmp)/nodeCount)*100.0<<"%"<<endl;
-      results.emplace(tableID,resultStr.str());
     }
-// 縮約処理
-// (1) 縮約対象を読み込む
-// (2) match (n) where ID(n)=[縮約対象]をグループごとにやる
+    auto tmp=nodeCount-contractedNodeNum+nodeNumAfterContraction;
+    stringstream resultStr;
+    resultStr<<"--------------------------------------------------------"<<endl;
+    resultStr<<"  Result: "<<tableID<<endl;
+    resultStr<<"--------------------------------------------------------"<<endl;
+    resultStr<<" 縮約前の全状態の個数     \t: "    <<nodeCount<<endl;
+    resultStr<<" 縮約された状態数         \t: "  <<contractedNodeNum<<endl;
+    resultStr<<" 作成された縮約状態の個数  \t: "  <<nodeNumAfterContraction<<endl;
+    resultStr<<" 縮約処理後の状態数        \t: "  <<tmp<<endl;
+    resultStr<<" 縮約後遷移集合のサイズ比率\t: "  <<(static_cast<double>(tmp)/nodeCount)*100.0<<"%"<<endl;
+    results.emplace(tableID,resultStr.str());
+  }
 
-// 検索処理(到達可能性)
-// in: start状態(全体)、goal状態(全体) vec1=の形でいい
-// 以下ループ
-// 1) ゴール状態を1つ読む
-// 2) 部分ヘッダで分解、ID抽出
-// 3) そのIDは強連結要素か？
-  // そうなら、そのノード(dest)へ繋がる、"強連結成分の一意のID"を持たないノード(source)を探して全部格納(ワープ)
-  // match (n)-[r:Rule]->(m) where n.cID IS NULL AND m.cID=0 return n,r,m
-// match p=shortestPath((n)-[*..100000]-(m)) where n.cID IS NULL AND m.cID=0 AND ID(m)=18323 return ID(n)
-  // なければそのままdestと∫するノードのIDを取る
- // 4) goal状態を相手側のヘッダをみつつ展開
-//    (3分割以上ならヘッダとの差分)
-// 5) 与えられたstartと比較、合ってれば終わり
-// 6) そうでなければ、goal状態に格納
+  auto end = std::chrono::system_clock::now();
+  auto diff = end - start;
 
-// 以上ループ
-      auto end = std::chrono::system_clock::now();
-      auto diff = end - start;
-      for(auto& i:results){
-        cout<<i.second;
-      }
-
-      cout<<"========================================================"<<endl;
-      cout<<" 処理時間                \t: "    <<std::chrono::duration_cast<std::chrono::milliseconds>(diff).count()
-              << " msec("
-              << std::setfill ('0') << std::setw (2)
-              << std::chrono::duration_cast<std::chrono::hours>(diff).count()<<"h "
-              << std::setfill ('0') << std::setw (2)
-              << std::chrono::duration_cast<std::chrono::minutes>(diff).count()%60<<"m "
-              << std::setfill ('0') << std::setw (2)
-              << std::chrono::duration_cast<std::chrono::seconds>(diff).count()%60<<"s"
-              << ")" << std::endl;
-      cout<<"========================================================"<<endl;
+  cout<<"========================================================"<<endl;
+  cout<<" 処理時間                \t: "    <<std::chrono::duration_cast<std::chrono::milliseconds>(diff).count()
+          << " msec("
+          << std::setfill ('0') << std::setw (2)
+          << std::chrono::duration_cast<std::chrono::hours>(diff).count()<<"h "
+          << std::setfill ('0') << std::setw (2)
+          << std::chrono::duration_cast<std::chrono::minutes>(diff).count()%60<<"m "
+          << std::setfill ('0') << std::setw (2)
+          << std::chrono::duration_cast<std::chrono::seconds>(diff).count()%60<<"s"
+          << ")" << std::endl;
+  cout<<"========================================================"<<endl;
   neo4j_end_session(session);
   neo4j_close(connection);
   neo4j_client_cleanup();

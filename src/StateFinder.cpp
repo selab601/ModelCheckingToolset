@@ -4,7 +4,6 @@
 #include <errno.h>
 #include <stdio.h>
 #include <vector>
-#include <bitset>
 #include <memory>
 #include <list>
 #include <forward_list>
@@ -119,9 +118,6 @@ int main(int argc, char const *argv[])
       boost::trim_if(state,boost::is_any_of(","));
       localTable.second.insert(StateID(id,state));
     }
-    // for(const auto& i :localTable.first){
-    //   cout<<i.left<<"/"<<i.right<<endl;
-    // }
 
     string decodeStrA;
     string decodeStrB;
@@ -152,7 +148,6 @@ int main(int argc, char const *argv[])
     auto reflect=[](vector<string> globalState,const vector<string>& localState,const vector<string>& decodeTable)->string{
       auto decodeIter=decodeTable.begin();
       for(auto iter=localState.begin();iter!=localState.end();iter++,decodeIter++){
-        // cout<<"G["<<*decodeIter<<"]<="<<*iter<<endl;
         globalState[stoi(*decodeIter)]=*iter;
       }
       return join(globalState,",");
@@ -213,7 +208,6 @@ int main(int argc, char const *argv[])
             path.emplace(make_pair(resultGlobalstr,btResult.second));
             vector<string> tmp;
             split(tmp,resultGlobalstr,boost::is_any_of(","));
-            // cout<<btResult.second<<"<-("<<std::bitset<32>(join(tmp,"")).to_ulong()<<")";
             break; 
           }
         }

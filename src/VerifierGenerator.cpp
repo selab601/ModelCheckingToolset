@@ -67,7 +67,7 @@ int main(const int argc, char const *argv[]){
     }
 
     //
-    // Initialising attributeValueTable
+    // 属性定義を初期化
     //
     typedef map<string,set<string>> AttributeValueTable;
     AttributeValueTable attributeValueTable{};
@@ -78,7 +78,7 @@ int main(const int argc, char const *argv[]){
     }
     
     //
-    // Optimize Rules
+    // 制御ルールの最適化
     //
     // 属性,属性値1,属性値2,...を扱うvector
     vector<string> attributeInfo;
@@ -96,7 +96,7 @@ int main(const int argc, char const *argv[]){
     }
 
     //
-    // Create rule definition
+    // 制御ルール定義の作成
     //
     vector<string> ruleDefinition;
 
@@ -119,7 +119,7 @@ int main(const int argc, char const *argv[]){
     }
 
     //
-    // Output file "InitialStates"
+    // 初期状態集合の作成
     //
     int id=0;
     std::function<void(string,AttributeValueTable::iterator)> func
@@ -136,7 +136,7 @@ int main(const int argc, char const *argv[]){
     func("",attributeValueTable.begin());
 
     //
-    // Output "verifier.pml"
+    // "verifier.pml"の作成
     //
     verifier<<"#define ATTR_NUM " << attrNumber     <<endl<<endl
       <<"byte val[ATTR_NUM];"                       <<endl
@@ -167,9 +167,7 @@ int main(const int argc, char const *argv[]){
       <<"\tOutput();"                               <<endl
       <<"}}";
       return 0;
-  //
-  // Error handling
-  //
+
   }catch(const char* str){
     std::cerr<<"ERROR: "<<str<<std::endl;
     return 1;

@@ -20,8 +20,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 
-// 改名:InitStateConverter
-
 int main(int argc, char const *argv[])
 {
   try{

@@ -46,8 +46,8 @@ branchを切る方針ともいう 上ほど高い
     - 必ず動くもの
 
 + topic
-    - 機能追加/修正/削除/リファクタリング/その他を全部これでやる<br>
-    ex) hogeをfugaするbranch名→"hogeをfugaする"
+    - 機能追加/修正/削除/リファクタリング/その他を全部これでやる
+    - ex) hogeをfugaするbranch名→"hogeをfugaする" など
 
 + issue/プルリクの利用は適宜
 

@@ -51,7 +51,7 @@ int main(const int argc, char const *argv[]){
   using namespace std;
   try{
     //
-    // Create Files
+    // 制御ルール定義
     //
     fstream ruleList(argv[1], std::ios::in | std::ios::out);
 
@@ -71,7 +71,7 @@ int main(const int argc, char const *argv[]){
     }
 
     //
-    // Parsing rules
+    // 制御ルールをパース
     //
     vector<string> attributes;
     typedef map<string,set<string>> AttributeValueList;
@@ -90,7 +90,7 @@ int main(const int argc, char const *argv[]){
     }
 
     //
-    // Output file "AttributesTable"
+    // 属性定義を出力
     //
     for(auto iter=attributeValueList.begin();iter!=attributeValueList.end();iter++){
       auto result=iter->first;

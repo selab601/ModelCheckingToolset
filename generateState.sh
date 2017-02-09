@@ -26,8 +26,6 @@ run_statemanager(){
   && echo "Running StateManager..." && $workdir/bin/StateManager $2 $tmpdir/InitialStates $tmpdir $resultdir\
   && echo "Moving Files..." && mv $tmpdir/InitialStates $resultdir/ \
   && echo "Done."
-  # && echo "Generating DB..."\
-  # && neo4j-import --into $NEO4J_DATABASE_PATH --nodes:Node $tmpdir/InitialStates-header.csv,$tmpdir/InitialStates $relPath\
 }
 
 echo `date`

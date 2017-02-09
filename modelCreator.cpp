@@ -27,12 +27,10 @@ int main(int argc, char const *argv[])
   string lineRangeB="BC";
 
   auto goingRight=[&](auto& dest)->string{
-    // vector<string> str;
     auto line=lineRangeB.substr(lineRangeB.find_first_of(dest));
     list<string> result;
 
     for(auto iter=begin(line)+1;iter!=end(line);iter++){
-      // cout<<string(1,*iter); 
       result.push_back("CR2_X="+string(1,*iter));
     }
     if(result.size()>1){
@@ -43,12 +41,10 @@ int main(int argc, char const *argv[])
   };
 
   auto goingLeft=[&](auto& dest)->string{
-    // vector<string> str;
     auto line=lineRangeA.substr(0,lineRangeA.find_first_of(dest));
     list<string> result;
 
     for(auto iter=begin(line);iter!=end(line);iter++){
-      // cout<<string(1,*iter); 
       result.push_back("CR1_X="+string(1,*iter));
     }
     if(result.size()>1){

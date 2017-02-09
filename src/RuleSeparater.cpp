@@ -46,7 +46,6 @@ struct ruleGrammar : qi::grammar<Iterator,parsedAttributes(),qi::space_type>{
     precondition = property >> *("&&">>property | "||">>property);
     postcondition = attribute >> *("&&">>attribute);
     property  = '('>>precondition>>')' | attribute;
-    // attribute = as_string[raw[value>>'='>>value]];
     attribute = value>>'='>>omit[value];
     value     = as_string[lexeme[(standard::alpha | standard::char_('_'))>>*(standard::alnum | standard::char_('_'))]];
   }
@@ -67,9 +66,6 @@ auto parseRule(const std::string& str){
 
 int main(int argc, char const *argv[]){
   try{
-    // argv[1]="./sample/kamenoko";
-    // argv[2]="./kamenoko_attrTable";
-    // argv[3]="./";
     if(argc!=4){
       throw "Usage: ./RuleSeparater [RuleList] [AttributeList] [OutPutDir]";
     }
@@ -110,7 +106,7 @@ int main(int argc, char const *argv[]){
     }
 
     // ルールRnの[x]-conditionの条件式
-    // conditions[n].first(=pre)
+    // conditions[n].first(="pre-condition")
     std::vector<std::pair<std::set<std::string>,std::set<std::string>>> rules;
 
     for(std::string str;std::getline(ruleList,str) && str.size()>0;){
@@ -158,10 +154,6 @@ int main(int argc, char const *argv[]){
 
     Eigen::EigenSolver<Eigen::MatrixXd> es(laplacianMatrix);
 
-    // std::cout << laplacianMatrix << std::endl;
-    // std::cout <<std::fixed<< "全ての固有値:" << std::endl << es.eigenvalues()<<std::endl;
-    // std::cout <<std::fixed<< "全ての固有ベクトル:" << std::endl << es.eigenvectors()<<std::endl;
-
     // 固有値をベクトル化
     Eigen::VectorXd m_solved_val = es.eigenvalues().real().cast<double>();
 
@@ -170,17 +162,6 @@ int main(int argc, char const *argv[]){
 
     // 一番大きい要素を削除
     sortee.erase(std::remove(sortee.begin(), sortee.end(), *std::min_element(sortee.begin(),sortee.end())), sortee.end()); 
-
-    // 2番目に大きい要素
-    // std::cout<<"minPos: "<<std::distance(
-    //   m_solved_val.data(),
-    //   std::find(m_solved_val.data(), m_solved_val.data() + m_solved_val.rows() * m_solved_val.cols(),*std::min_element(sortee.begin(),sortee.end()))
-    //   );
-    // std::cout<<std::endl;
-    // std::cout << "欲しい固有ベクトル:" << std::endl << es.eigenvectors().col(std::distance(
-      // m_solved_val.data(),
-      // std::find(m_solved_val.data(), m_solved_val.data() + m_solved_val.rows() * m_solved_val.cols(),*std::min_element(sortee.begin(),sortee.end()))
-      // ))<<std::endl;
 
     Eigen::VectorXd resultEigen=es.eigenvectors().col(std::distance(
       m_solved_val.data(),
@@ -242,8 +223,6 @@ int main(int argc, char const *argv[]){
     std::set<std::string> postProperties_B={};
     auto extractAttributeSet = [&](std::string buffer,std::set<std::string>* preProperties,std::set<std::string>* postProperties){
       auto result=parseRule(buffer);
-      //*preProperties+=result.preAttributes;
-      //*postProperties+=result.postAttributes;
       preProperties->insert(result.preAttributes.begin(), result.preAttributes.end());
       postProperties->insert(result.postAttributes.begin(), result.postAttributes.end());
     };

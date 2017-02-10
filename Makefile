@@ -1,7 +1,7 @@
 SRCDIR:=$(CURDIR)/src/
 BINDIR:=$(CURDIR)/bin/
 
-BOOSTUSERNAME:=StateManager VerifierGenerator AttributeTableGenerator RuleSeparater DBMerge
+BOOSTUSERNAME:=StateManager VerifierGenerator AttributeTableGenerator RuleSeparater InitStateConverter
 NEO4JUSERNAME:=SCCFinder
 BOTHUSERNAME:=StateFinder
 

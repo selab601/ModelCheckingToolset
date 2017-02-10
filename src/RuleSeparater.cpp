@@ -6,10 +6,8 @@
 #include <unordered_set>
 #include <string>
 #include <iterator>
-
 #include <algorithm>
 #include <functional>
-
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/spirit/include/qi.hpp>

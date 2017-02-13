@@ -8,6 +8,8 @@
 #include <iterator>
 #include <algorithm>
 #include <functional>
+#include <exception>
+
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/spirit/include/qi.hpp>
@@ -58,43 +60,20 @@ int main(int argc, char const *argv[]){
   using namespace std;
   try{
     if(argc!=4){
-      throw "Usage: ./RuleSeparater [RuleList] [AttributeList] [OutPutDir]";
+      throw "Usage: ./RuleSeparater [制御ルール定義] [属性定義] [出力先ディレクトリ]";
     }
 
     boost::filesystem::path rulePath(argv[1]);
     boost::filesystem::path attrTablePath(argv[2]);
     boost::filesystem::path resultDirPath(argv[3]);
-
-    if(!boost::filesystem::exists(rulePath)){
-      throw "そんなRuleListはない";
-    }
-
-    if(!boost::filesystem::exists(attrTablePath)){
-      throw "そんなAttrTableはない";
-    }
-
-    if(!boost::filesystem::exists(resultDirPath)){
-      throw "そんなディレクトリはない";
-    }
-
+    boost::filesystem::is_empty(rulePath);
+    boost::filesystem::is_empty(attrTablePath);
+    boost::filesystem::is_empty(resultDirPath);
     string resultDirFullPath = resultDirPath.string()+rulePath.stem().string()+"_separated/";
-
-    if(boost::filesystem::exists(resultDirFullPath)){
-      resultDirFullPath.insert(0,"分割結果がすでにある : ");
-      throw resultDirFullPath.c_str();
-    }
-
     boost::filesystem::create_directory(resultDirFullPath);
 
-    ifstream ruleList(argv[1]);
-    if(ruleList.fail()){
-      throw "ルールリスト読込みエラー";
-    }
-
-    ifstream attrTable(argv[2]);
-    if(attrTable.fail()){
-      throw "属性テーブル読込みエラー";
-    }
+    boost::filesystem::ifstream ruleList(rulePath);
+    boost::filesystem::ifstream attrTable(attrTablePath);
 
     // ルールRnの[x]-conditionの条件式
     // conditions[n].first(="pre-condition")
@@ -285,6 +264,8 @@ int main(int argc, char const *argv[]){
 
     cout<<"Done."<<endl;
     return 0;
+  }catch(boost::filesystem::filesystem_error& ex){
+    cout<<ex.what()<<endl;
   }catch(const char* str){
     cout<<str<<endl;
     return -1;

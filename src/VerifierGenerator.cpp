@@ -38,27 +38,23 @@ struct ruleGrammar : qi::grammar<Iterator,qi::space_type>{
 int main(const int argc, char const *argv[]){
   using namespace std;
   try{
-    //
-    // Create Files
-    //
-    fstream ruleList(argv[1], std::ios::in | std::ios::out);
-    fstream attributesTable(argv[2], std::ios::in | std::ios::out);
-    boost::filesystem::path outputPath(argv[3]);
     if(argc!=4){
-      throw "Require 3 arguments(Rulelist,AttributesTable,OutPutDir).";
-    }
-    if(ruleList.fail()){
-      throw "Failed to load Rulelist.";
-    }
-    if(attributesTable.fail()){
-      throw "Failed to load AttributesTable.";
-    }
-    if(!boost::filesystem::exists(outputPath)){
-      throw "OutPutPath doesn't exist.";
+      throw "Usage: ./VerifierGenerator [制御ルール定義] [属性定義] [出力先ディレクトリ]";
     }
 
-    ofstream initialStates(outputPath.string()+"/InitialStates",std::ios::trunc);
-    ofstream verifier(outputPath.string()+"/verifier.pml",ios::trunc);
+    boost::filesystem::path rulePath(argv[1]);
+    boost::filesystem::path attrTablePath(argv[2]);
+    boost::filesystem::path resultDirPath(argv[3]);
+    boost::filesystem::is_empty(rulePath);
+    boost::filesystem::is_empty(attrTablePath);
+    boost::filesystem::is_empty(resultDirPath);
+    boost::filesystem::ifstream ruleList(rulePath);
+    boost::filesystem::fstream attributesTable(attrTablePath, std::ios::in | std::ios::out);
+    boost::filesystem::path outputPath(resultDirPath);
+
+    boost::filesystem::ofstream initialStates(outputPath/"InitialStates",std::ios::trunc);
+    boost::filesystem::ofstream verifier(outputPath/"verifier.pml",ios::trunc);
+
     if(initialStates.fail()){
       throw "Failed to create file : InitialStates";
     }
@@ -76,7 +72,7 @@ int main(const int argc, char const *argv[]){
       boost::split(values,str,boost::is_any_of(","));
       attributeValueTable.emplace(*values.begin(),set<string>(values.begin()+1,values.end()));
     }
-    
+
     //
     // 制御ルールの最適化
     //

@@ -14,6 +14,11 @@
 
 いずれもbrew経由でinstallすればおｋ
 
+    brew install neo4j
+    brew install boost
+    brew install cleishm/neo4j/neo4j-client
+
+
 # ツールセットの使い方
 Initial commit時点
 

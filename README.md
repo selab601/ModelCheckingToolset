@@ -26,9 +26,9 @@ Initial commit時点
     ./bin/RuleSeparater [RuleList] [OutPutDir]
     ./generateState.sh [RuleList]_separated/ruleCuts_A [RuleList]_separated/ruleCuts_A_attrTable
     ./generateState.sh [RuleList]_separated/ruleCuts_B [RuleList]_separated/ruleCuts_B_attrTable
-    ./bin/DBMerge [RuleList]_separated
+    ./bin/InitStateConverter [RuleList]_separated
     ./importDB.sh [RuleList]_separated
-    neo4j restart
+    neo4j restart(neo4jのアカウントのパスワードはneo4Jにする)
     ./bin/StateFinder ./[RuleList]_separated [開始状態] [終了状態]
 
 # 当面の作業方針

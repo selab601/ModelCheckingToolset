@@ -6,7 +6,7 @@
 # 依存
 丸括弧内は動作確認できたversion
 
-+ Neo4j(3.0.7,3.1.0)
++ Neo4j(3.0.7,3.1.0,3.1.1)
 
 + Boost(新しいの)
 
@@ -30,6 +30,39 @@ Initial commit時点
     ./importDB.sh [RuleList]_separated
     neo4j restart(neo4jのアカウントのパスワードはneo4Jにする)
     ./bin/StateFinder ./[RuleList]_separated [開始状態] [終了状態]
+
+
+モデルがcrane_2F_3の場合
+
+    make
+    
+    #OutPutDir作成
+    mkdir crane_2F_3
+
+    #ルール分割
+    ./bin/RuleSeparater models/crane_2F_3 models/crane_2F_3_attrTable crane_2F_3/ (←スラッシュ必須)
+    
+    #状態生成
+    ./generateState.sh crane_2F_3/crane_2F_3_separated/ruleCuts_A crane_2F_3/crane_2F_3_separated/ruleCuts_A_attrTable
+    ./generateState.sh crane_2F_3/crane_2F_3_separated/ruleCuts_B crane_2F_3/crane_2F_3_separated/ruleCuts_B_attrTable
+    ./bin/InitStateConverter crane_2F_3_separated
+
+    #自分のNeo4jのバージョンが3.0.7でない場合
+    config ファイル上のパスを使用するバージョン名に変更する
+    #データベース名をgraph.db以外にする場合
+    neo4j/バージョン/libexec/conf/neo4j.conf を開き、#The name of the database to mountを変更
+    
+    #neo4jに遷移格納
+    ./importDB.sh crane_2F_3/crane_2F_3_separated
+
+    #neo4j再起動
+    neo4j restart
+
+    #遷移検索
+    ./bin/StateFinder ./crane_2F_3/crane_2F_3_separated [開始状態][終了状態]
+
+
+
 
 # 当面の作業方針
 branchを切る方針ともいう 上ほど高い

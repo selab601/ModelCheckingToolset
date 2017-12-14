@@ -10,7 +10,7 @@
 
 + Boost(新しいの)
 
-+ libneo4j-client(新しいの)
++ libneo4j-client(新しいの)(1.2.1)
 
 いずれもbrew経由でinstallすればおｋ
 
@@ -61,7 +61,23 @@ Initial commit時点
     #遷移検索
     ./bin/StateFinder ./crane_2F_3/crane_2F_3_separated [開始状態][終了状態]
 
+    #状態について
+    属性一覧はcrane_3F_3_attrTableにある通り12種類
+    A1,Loading,None         (荷物が格納されてる:0,格納されていない:1)
+    A2,Loading,None
+    B1,Loading,None
+    B2,Loading,None
+    C1,Loading,None
+    C2,Loading,None
+    CR1_LOADING,False,True  (クレーンが荷物を持っていない:0,持っている:1)
+    CR1_X,A,B               (X座標がA:0,B:1)
+    CR1_Y,_1,_2             (Y座標が1:0,2:1)
+    CR2_LOADING,False,True
+    CR2_X,B,C
+    CR2_Y,_1,_2
 
+    #すべての箱とクレーン上が空でクレーン１がA1,クレーン２がC1にいる場合
+    1,1,1,1,1,1,0,0,0,0,1,0
 
 
 # 当面の作業方針
